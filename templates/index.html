@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VAPT Dashboard</title>
+    <style>
+        body{
+            background:#0d1117;
+            color:white;
+            font-family:Arial;
+            margin:0;
+        }
+
+        .header{
+            background:#161b22;
+            padding:20px;
+            text-align:center;
+            font-size:32px;
+            font-weight:bold;
+            color:#58a6ff;
+        }
+
+        .container{
+            display:flex;
+            justify-content:center;
+            flex-wrap:wrap;
+            margin-top:40px;
+        }
+
+        .card{
+            background:#21262d;
+            width:250px;
+            margin:20px;
+            padding:20px;
+            border-radius:12px;
+            text-align:center;
+            box-shadow:0px 0px 15px #000;
+        }
+
+        .card h2{
+            color:#58a6ff;
+        }
+
+        .status{
+            color:#3fb950;
+            font-size:22px;
+        }
+
+        footer{
+            margin-top:60px;
+            text-align:center;
+            color:gray;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+🛡 VAPT Dashboard
+</div>
+
+<div class="container">
+
+<div class="card">
+<h2>Nmap Scan</h2>
+<p class="status">Completed</p>
+</div>
+
+<div class="card">
+<h2>Burp Suite</h2>
+<p class="status">Completed</p>
+</div>
+
+<div class="card">
+<h2>DVWA</h2>
+<p class="status">Running</p>
+</div>
+
+<div class="card">
+<h2>OWASP ZAP</h2>
+<p class="status">Pending</p>
+</div>
+
+</div>
+
+<div style="text-align:center;margin-top:40px;">
+
+<form action="/upload" method="POST" enctype="multipart/form-data">
+
+<input type="file" name="scan">
+
+<br><br>
+
+<button style="padding:10px;width:220px;background:#238636;color:white;border:none;border-radius:6px;">
+Upload Nmap XML
+</button>
+
+</form>
+
+</div>
+
+<footer>
+third  Year Cyber Security Project
+</footer>
+{% if hosts %}
+
+<div style="width:80%;margin:auto;color:white;margin-top:40px">
+
+<h2>Scan Results</h2>
+
+{% for host in hosts %}
+
+<h3>Target : {{ host.ip }}</h3>
+
+<table border="1" cellpadding="8">
+
+ <tr>
+<th>Port</th>
+<th>Service</th>
+<th>Risk</th>
+</tr>
+
+
+{%
+for p in host.ports %}
+
+<tr>
+
+<td>{{ p.port }}</td>
+<td>
+{% if p.risk == "Critical" %}
+<span style="color:red;font-weight:bold;">{{ p.risk }}</span>
+{% elif p.risk == "High" %}
+<span style="color:orange;font-weight:bold;">{{ p.risk }}</span>
+{% elif p.risk == "Medium" %}
+<span style="color:blue;font-weight:bold;">{{ p.risk }}</span>
+{% else %}
+<span style="color:green;font-weight:bold;">{{ p.risk }}</span>
+{% endif %}
+</td>
+<td>{{ p.risk }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+{% endfor %}
+
+</div>
+<br><br>
+
+<a href="/report">
+<button style="padding:10px 20px;background:#16a34a;color:white;border:none;border-radius:6px;">
+Download PDF Report
+</button>
+</a>
+{% endif %}
+
+</body>
+</html>
